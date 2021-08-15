@@ -13,7 +13,7 @@ public class UserService {
 
 
     @Autowired
-    private UserRepository repository;
+    UserRepository repository;
 
     public List<User> getAllUsers(){
         return repository.findAll();
@@ -36,12 +36,8 @@ public class UserService {
     public Subscription getSubscriptionFromEmail(String email)
     {
         User usr = getUserByEmail(email);
-        Subscription sub = new Subscription();
-        sub.endpoint = usr.getEndpoint();
-        sub.keys.auth = usr.getAuth();
-        sub.keys.p256dh = usr.getP256dh();
-
-        return sub;
+        Subscription.Keys keys = new Subscription.Keys(usr.getP256dh(),usr.getAuth());
+        return new Subscription(usr.getEndpoint(),keys);
     }
 
 }
