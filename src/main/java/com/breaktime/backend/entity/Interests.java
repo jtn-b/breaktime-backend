@@ -1,15 +1,13 @@
 package com.breaktime.backend.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
 @Table(name="interests")
@@ -20,5 +18,11 @@ public class Interests {
     private int id;
     private String email;
     private int categoryID;
+
+    public Interests(String email,int categoryID)
+    {
+        this.email = email;
+        this.categoryID = categoryID;
+    }
 
 }

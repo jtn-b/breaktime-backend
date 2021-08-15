@@ -1,9 +1,6 @@
 package com.breaktime.backend.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,6 +9,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
 @Table(name = "user")

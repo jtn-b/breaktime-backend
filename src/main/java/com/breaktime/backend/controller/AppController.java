@@ -2,7 +2,9 @@ package com.breaktime.backend.controller;
 
 
 import com.breaktime.backend.dto.UserDataDto;
+import com.breaktime.backend.entity.User;
 import com.breaktime.backend.service.NotificationService;
+import com.breaktime.backend.service.UserService;
 import nl.martijndwars.webpush.Subscription;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class AppController {
     @Autowired
     NotificationService NotificationService;
 
+    @Autowired
+    UserService UserService;
+
     @RequestMapping(value = "/subscribe",method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     public void newSubscriber(@RequestBody UserDataDto UserDataDto)
@@ -32,10 +37,9 @@ public class AppController {
         payload.put("title","Welcome To BreakTime!");
         payload.put("message","This is how I will remind you to take a break.");
 
+        UserService.saveUser(new User(UserDataDto.email,subData.endpoint,subData.keys.p256dh,subData.keys.auth));
         NotificationService.sendNotification(subData,payload.toJSONString());
     }
-
-
 
 
 
