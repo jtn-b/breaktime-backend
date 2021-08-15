@@ -26,6 +26,8 @@ public class InterestsService {
 
     }
 
+    public List<Interests> getAllInterests(){return InterestsRepository.findAll();}
+
     public List<Interests> getUserInterests(String email)
     {
         return InterestsRepository.findByEmail(email);

@@ -54,7 +54,7 @@ public class AppController {
 
 
 
-    @Scheduled(initialDelay = 5000L,fixedDelayString = "PT7S")
+    @Scheduled(initialDelay = 5000L,fixedDelayString = "PT1H")
     public void sendNotificationsToAll(){
         System.out.println("Executing timed notification");
         List<User> allUsers = UserService.getAllUsers();

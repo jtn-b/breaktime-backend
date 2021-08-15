@@ -15,10 +15,16 @@ public class InterestsController {
     @Autowired
     InterestsService IntService;
 
-    @RequestMapping(value = "/",method = RequestMethod.GET)
-    public List<Interests> getUserInterests(String email){
+    @RequestMapping(value = "/list",method = RequestMethod.GET)
+    public List<Interests> getAllInterests(){
+        return IntService.getAllInterests();
+    }
+
+    @RequestMapping(value = "/bymail",method = RequestMethod.GET)
+    public List<Interests> getUserInterests(@RequestParam("email") String email){
         return IntService.getUserInterests(email);
     }
+
 
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     public Interests createCategory(@RequestBody Interests Interest){
