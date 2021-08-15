@@ -1,6 +1,7 @@
 package com.breaktime.backend.controller;
 
 
+import com.breaktime.backend.dto.UserDataDto;
 import com.breaktime.backend.service.NotificationService;
 import nl.martijndwars.webpush.Subscription;
 import org.jose4j.json.internal.json_simple.JSONObject;
@@ -20,16 +21,23 @@ public class AppController {
 
     @RequestMapping(value = "/subscribe",method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void newSubscriber(@RequestBody Subscription subscriberData)
+    public void newSubscriber(@RequestBody UserDataDto UserDataDto)
     {
-        NotificationService.subscribe(subscriberData);
+        System.out.println(UserDataDto.email);
+        System.out.println(UserDataDto.toString());
+        Subscription subData = UserDataDto.subscriptionData;
+        NotificationService.subscribe(subData);
 
         JSONObject payload = new JSONObject();
-        payload.put("title","Take A Break");
-        payload.put("message","You might want to a take a few steps.");
+        payload.put("title","Welcome To BreakTime!");
+        payload.put("message","This is how I will remind you to take a break.");
 
-        NotificationService.sendNotification(subscriberData,payload.toJSONString());
+        NotificationService.sendNotification(subData,payload.toJSONString());
     }
+
+
+
+
 
     @RequestMapping(value = "/test",method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
