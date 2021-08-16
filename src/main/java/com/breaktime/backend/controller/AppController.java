@@ -24,7 +24,6 @@ public class AppController {
 
     @Autowired
     NotificationService NotificationService;
-
     @Autowired
     UserService UserService;
     @Autowired
@@ -37,10 +36,14 @@ public class AppController {
 
     @RequestMapping(value = "/subscribe",method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void newSubscriber(@RequestBody UserDataDto UserDataDto)
+    public User newSubscriber(@RequestBody UserDataDto UserDataDto)
     {
         System.out.println(UserDataDto.email);
         System.out.println(UserDataDto.toString());
+
+        User userAlreadyExists = UserService.getUserByEmail(UserDataDto.email);
+        if(userAlreadyExists != null)
+            return null;
         Subscription subData = UserDataDto.subscriptionData;
         NotificationService.subscribe(subData);
 
@@ -48,8 +51,10 @@ public class AppController {
         payload.put("title","Welcome To BreakTime!");
         payload.put("message","This is how I will remind you to take a break.");
 
-        UserService.saveUser(new User(UserDataDto.email,subData.endpoint,subData.keys.p256dh,subData.keys.auth));
+        User newUser = new User(UserDataDto.email,subData.endpoint,subData.keys.p256dh,subData.keys.auth);
+        UserService.saveUser(newUser);
         NotificationService.sendNotification(subData,payload.toJSONString());
+        return newUser;
     }
 
 
@@ -68,17 +73,10 @@ public class AppController {
             Subscription sub = UserService.getSubscriptionFromEmail(usr.getEmail());
             payload.put("title","BreakTime Alert");
             payload.put("message",random_Activity.getTask());
-
+            payload.put("link",random_Activity.getRedirectLink());
             NotificationService.sendNotification(sub,payload.toJSONString());
 
         }
     }
-
-//    @RequestMapping(value = "/test",method = RequestMethod.GET)
-//    @ResponseStatus(value = HttpStatus.OK)
-//    public void sendNotification(){
-//        NotificationService.sendNotificationstoAll();
-//    }
-
 
 }
